@@ -1,11 +1,11 @@
 {
-  "routes": [
-    { "src": "^/health$", "dest": "/api/index.py" },
-    { "src": "^/predict$", "dest": "/api/index.py" },
-    { "src": "^/upload$", "dest": "/api/index.py" },
-    { "src": "^/history$", "dest": "/api/index.py" },
-    { "src": "^/reports/extract-simple$", "dest": "/api/index.py" },
-    { "handle": "filesystem" },
-    { "src": "^/$", "dest": "/index.html" }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/health", "destination": "/api/index.py" },
+    { "source": "/predict", "destination": "/api/index.py" },
+    { "source": "/upload", "destination": "/api/index.py" },
+    { "source": "/history", "destination": "/api/index.py" },
+    { "source": "/reports/extract-simple", "destination": "/api/index.py" }
   ]
 }
