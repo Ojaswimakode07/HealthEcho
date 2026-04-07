@@ -76,7 +76,7 @@
   <div class="main-area">
 
     <!-- NAV -->
-    <nav class="nav">
+    <nav class="nav med-app-header">
       <div class="nav-left">
         <button class="menu-toggle" type="button" aria-label="Open menu" onclick="toggleSidebar()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -85,11 +85,19 @@
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <div class="nav-logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <div class="nav-logo med-app-brand">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <div class="logo-text">Health<em>Echo</em></div>
+            <div class="med-app-sub">AI guidance for symptoms, reports, and care</div>
+          </div>
         </div>
-        <span class="logo-text">Health<em>Echo</em></span>
+        <div class="med-app-links">
+          <button class="med-toplink" onclick="switchToTab('home')">Home</button>
+          <button class="med-toplink" onclick="showRoboGuide()">How it works</button>
+          <button class="med-toplink" onclick="switchToTab('upload')">Reports</button>
         </div>
       </div>
       <div class="nav-r" id="navR">
@@ -97,9 +105,9 @@
           <div class="backend-dot"></div>
           <span>AI Offline</span>
         </div>
-        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">ðŸŒ™</button>
-        <button class="btn btn-sm" onclick="showModal('loginModal')">Login</button>
-        <button class="btn btn-p btn-sm" onclick="showModal('signupModal')">Sign up</button>
+        <button class="theme-toggle med-header-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">ðŸŒ™</button>
+        <button class="btn btn-sm med-header-btn" onclick="showModal('loginModal')">Login</button>
+        <button class="btn btn-p btn-sm med-header-btn" onclick="showModal('signupModal')">Sign up</button>
       </div>
     </nav>
 
@@ -115,18 +123,27 @@
           <section class="med-hero">
             <div class="med-hero-shell">
               <div class="med-topbar">
-                <div class="med-brand-mini">
-                  <span class="med-brand-mark">HE</span>
-                  <div>
-                    <div class="med-brand-name">HealthEcho Care</div>
-                    <div class="med-brand-tag">AI guidance for symptoms, reports, and next steps</div>
+                <div class="med-topbar-left">
+                  <button class="menu-toggle med-home-menu" type="button" aria-label="Open menu" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <line x1="3" y1="12" x2="21" y2="12"></line>
+                      <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                  </button>
+                  <div class="med-brand-mini">
+                    <span class="med-brand-mark">HE</span>
+                    <div>
+                      <div class="med-brand-name">HealthEcho Care</div>
+                      <div class="med-brand-tag">AI guidance for symptoms, reports, and next steps</div>
+                    </div>
                   </div>
                 </div>
-                <div class="med-toplinks">
-                  <button class="med-toplink is-on" onclick="switchToTab('home')">Home</button>
-                  <button class="med-toplink" onclick="showRoboGuide()">How it works</button>
-                  <button class="med-toplink" onclick="switchToTab('upload')">Reports</button>
-                  <button class="btn btn-p btn-sm med-cta" onclick="switchToTab('chat')">Book Appointment</button>
+                <div class="med-topbar-right">
+                  <button class="theme-toggle med-home-toggle" id="homeThemeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">ðŸŒ™</button>
+                  <button class="btn btn-sm med-home-auth" onclick="showModal('loginModal')">Login</button>
+                  <button class="btn btn-p btn-sm med-home-auth" onclick="showModal('signupModal')">Sign up</button>
+                  <button class="btn btn-p btn-sm med-cta" onclick="switchToTab('chat')">Start AI consult</button>
                 </div>
               </div>
 
@@ -189,7 +206,7 @@
                 <label>Availability</label>
                 <strong>Start now</strong>
               </div>
-              <button class="btn btn-p med-strip-btn" onclick="switchToTab('chat')">Book Appointment</button>
+              <button class="btn btn-p med-strip-btn" onclick="switchToTab('chat')">Start AI consult</button>
             </div>
           </section>
 
@@ -258,14 +275,32 @@
           </div>
           <div class="comp">Medical note: HealthEcho does not diagnose or prescribe. For emergencies, call your local emergency number or go to the nearest ER immediately.</div>
           <footer class="site-footer">
-            <div>
-              <div class="site-footer-title">HealthEcho Team</div>
-              <div class="site-footer-copy">Designed to make symptom guidance, report understanding, and care discovery feel simpler and more human.</div>
+            <div class="site-footer-grid">
+              <div class="site-footer-brand">
+                <div class="site-footer-title">HealthEcho Team</div>
+                <div class="site-footer-copy">A supportive digital health experience focused on symptom guidance, report understanding, and helping users move toward care with confidence.</div>
+              </div>
+              <div class="site-footer-col">
+                <div class="site-footer-head">Product</div>
+                <button class="site-footer-link" onclick="switchToTab('chat')">AI Consult</button>
+                <button class="site-footer-link" onclick="switchToTab('upload')">Report Dashboard</button>
+                <button class="site-footer-link" onclick="switchToTab('history')">History</button>
+              </div>
+              <div class="site-footer-col">
+                <div class="site-footer-head">Care</div>
+                <button class="site-footer-link" onclick="switchToTab('hospitals')">Find Doctors</button>
+                <button class="site-footer-link" onclick="showRoboGuide()">How it works</button>
+                <button class="site-footer-link" onclick="switchToTab('profile')">Profile</button>
+              </div>
+              <div class="site-footer-col">
+                <div class="site-footer-head">Trust</div>
+                <div class="site-footer-note">Built around public-health references and a calm, doctor-ready user experience.</div>
+                <div class="site-footer-note">HealthEcho does not replace a qualified healthcare professional.</div>
+              </div>
             </div>
-            <div class="site-footer-links">
-              <button class="site-footer-link" onclick="switchToTab('chat')">AI Consult</button>
-              <button class="site-footer-link" onclick="switchToTab('upload')">Reports</button>
-              <button class="site-footer-link" onclick="switchToTab('hospitals')">Doctors</button>
+            <div class="site-footer-bottom">
+              <span>© HealthEcho Team</span>
+              <span>AI Medical Intelligence</span>
             </div>
           </footer>
         </div>

@@ -71,6 +71,7 @@ function goHistory() {
 
 function switchToTab(name) {
   closeSidebar();
+  document.body.classList.toggle('home-mode', name === 'home');
   if (name === 'history' && !STATE.user) {
     showToast('Sign in to view consultation history');
     showModal('loginModal');
@@ -105,6 +106,8 @@ function closeSidebar() {
 function toggleSidebar() {
   document.body.classList.toggle('sidebar-open');
 }
+
+document.body.classList.toggle('home-mode', true);
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // MODALS
