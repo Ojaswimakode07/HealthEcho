@@ -48,7 +48,7 @@ localStorage.setItem('he_visited', '1');
 function applyTheme() {
   document.body.classList.toggle('light', !STATE.darkMode);
   const tt = document.getElementById('themeToggle');
-  if (tt) tt.textContent = STATE.darkMode ? 'ðŸŒ™' : 'â˜€ï¸';
+  if (tt) tt.textContent = STATE.darkMode ? 'Moon' : 'Sun';
 }
 function toggleTheme() {
   STATE.darkMode = !STATE.darkMode;
@@ -131,22 +131,22 @@ async function testGroqKey() {
   if (!k) { showToast('No AI key found'); return; }
   const btn = document.getElementById('groqTestBtn');
   const st = document.getElementById('groqKeyStatus');
-  btn.disabled = true; btn.textContent = 'Testingâ€¦';
+  btn.disabled = true; btn.textContent = 'Testing...';
   try {
     const res = await fetch('https://api.groq.com/openai/v1/models', {
       headers: { Authorization: 'Bearer ' + k }
     });
     if (res.ok) {
       STATE.groqOnline = true;
-      if (st) { st.textContent = 'âœ“ AI key is valid! Analysis is active.'; st.style.color = 'var(--teal)'; }
-      showToast('âœ“ AI connected!');
+      if (st) { st.textContent = 'AI key is valid. Analysis is active.'; st.style.color = 'var(--teal)'; }
+      showToast('AI connected');
     } else {
       STATE.groqOnline = false;
-      if (st) { st.textContent = 'âœ— Invalid key or network error.'; st.style.color = 'var(--red)'; }
+      if (st) { st.textContent = 'Invalid key or network error.'; st.style.color = 'var(--red)'; }
     }
   } catch(e) {
     STATE.groqOnline = false;
-    if (st) { st.textContent = 'âœ— Could not reach AI service (network error).'; st.style.color = 'var(--red)'; }
+    if (st) { st.textContent = 'Could not reach AI service (network error).'; st.style.color = 'var(--red)'; }
   }
   btn.disabled = false; btn.textContent = 'Test Key';
   updateBackendBadge();
@@ -155,7 +155,7 @@ async function testGroqKey() {
 function updateBackendBadge() {
   const hasKey = !!getGroqKey();
   const online = STATE.groqOnline;
-  const txt = online ? 'AI âœ“' : hasKey ? 'AI âš¡' : 'AI';
+  const txt = online ? 'AI Online' : hasKey ? 'AI Ready' : 'AI Offline';
   ['navBackendBadge','sidebarBackendBadge'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inp = document.getElementById('groqKeyInput');
   if (inp && saved) { inp.value = saved; }
   const st = document.getElementById('groqKeyStatus');
-  if (st && saved) { st.textContent = 'âœ“ AI key loaded â€” ready to analyze reports.'; st.style.color = 'var(--teal)'; }
+  if (st && saved) { st.textContent = 'AI key loaded - ready to analyze reports.'; st.style.color = 'var(--teal)'; }
   STATE.groqOnline = true;
   updateBackendBadge();
 });
@@ -3718,7 +3718,10 @@ const TRANSLATIONS = {
   }
 };
 
-let currentLang = localStorage.getItem('he_lang') || 'en';
+const DEFAULT_LANG = 'en';
+const SUPPORTED_LANGS = ['en', 'hi', 'mr', 'bn', 'ta'];
+const savedLang = localStorage.getItem('he_lang');
+let currentLang = SUPPORTED_LANGS.includes(savedLang) ? savedLang : DEFAULT_LANG;
 
 function t(key) { return (TRANSLATIONS[currentLang] || TRANSLATIONS.en)[key] || TRANSLATIONS.en[key] || key; }
 
