@@ -102,19 +102,121 @@
       <!-- HOME / LANDING -->
       <div class="scr on" id="s-home">
         <div class="pad">
-          <div class="home-hero">
-            <h1>Welcome to Health<em>Echo</em></h1>
-            <p class="home-lead">HealthEcho helps you understand symptoms using trusted public-health references (WHO, ICMR, CDC, and similar), upload reports for a structured lab dashboard, and find nearby care in Amravati. It is an educational tool â€” not a substitute for a licensed clinician.</p>
-            <div class="home-actions">
-              <button class="btn btn-p" onclick="switchToTab('chat')">Start AI consult</button>
-              <button class="btn btn-outline" onclick="switchToTab('upload')">Upload a report</button>
-              <button class="btn btn-sm" onclick="showRoboGuide()">How it works</button>
+          <section class="med-hero">
+            <div class="med-hero-shell">
+              <div class="med-topbar">
+                <div class="med-brand-mini">
+                  <span class="med-brand-mark">HE</span>
+                  <div>
+                    <div class="med-brand-name">HealthEcho Care</div>
+                    <div class="med-brand-tag">AI guidance for symptoms, reports, and next steps</div>
+                  </div>
+                </div>
+                <div class="med-toplinks">
+                  <button class="med-toplink is-on" onclick="switchToTab('home')">Home</button>
+                  <button class="med-toplink" onclick="showRoboGuide()">How it works</button>
+                  <button class="med-toplink" onclick="switchToTab('upload')">Reports</button>
+                  <button class="btn btn-p btn-sm med-cta" onclick="switchToTab('chat')">Book Appointment</button>
+                </div>
+              </div>
+
+              <div class="med-hero-grid">
+                <div class="med-copy">
+                  <div class="med-kicker">Smart clinical support</div>
+                  <h1>A better care experience for everyday health questions</h1>
+                  <p class="home-lead">HealthEcho helps you understand symptoms using trusted references, upload reports for a structured medical dashboard, and find nearby care without losing clarity.</p>
+                  <div class="home-actions">
+                    <button class="btn btn-p" onclick="switchToTab('chat')">Start AI consult</button>
+                    <button class="btn btn-outline" onclick="switchToTab('upload')">Upload a report</button>
+                    <button class="btn btn-sm" onclick="switchToTab('hospitals')">Find doctors</button>
+                  </div>
+                  <div class="med-proof">
+                    <span>Guided symptom intake</span>
+                    <span>Doctor-ready summaries</span>
+                    <span>Nearby care discovery</span>
+                  </div>
+                </div>
+
+                <div class="med-hero-card">
+                  <div class="med-card-screen">
+                    <div class="med-screen-badge">Health dashboard</div>
+                    <h3>A calm path from symptoms to action</h3>
+                    <p>Move from concern to clarity with safe intake questions, report insights, and practical follow-up recommendations.</p>
+                    <div class="med-card-list">
+                      <div><span class="med-dot"></span> Symptom prioritization</div>
+                      <div><span class="med-dot"></span> Lab report review</div>
+                      <div><span class="med-dot"></span> Specialist suggestions</div>
+                    </div>
+                  </div>
+                  <div class="med-doctor-row">
+                    <div class="med-avatar-card">
+                      <span>24/7</span>
+                      <small>On-demand guidance</small>
+                    </div>
+                    <div class="med-avatar-card">
+                      <span>AI</span>
+                      <small>Report analysis</small>
+                    </div>
+                    <div class="med-avatar-card">
+                      <span>Care</span>
+                      <small>Prepared next steps</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="med-appointment-strip">
+              <div class="med-appt-field">
+                <label>Choose service</label>
+                <strong>AI Consult</strong>
+              </div>
+              <div class="med-appt-field">
+                <label>Best for</label>
+                <strong>Symptoms or reports</strong>
+              </div>
+              <div class="med-appt-field">
+                <label>Availability</label>
+                <strong>Start now</strong>
+              </div>
+              <button class="btn btn-p med-strip-btn" onclick="switchToTab('chat')">Book Appointment</button>
+            </div>
+          </section>
+
+          <section class="med-services">
+            <div class="med-services-copy">
+              <div class="card-title">Care Experience</div>
+              <h2>See what we provide to keep you healthy</h2>
+              <p>Use HealthEcho for guided symptom triage, structured lab interpretation, and quick navigation toward the right care channel when you need it.</p>
+            </div>
+            <div class="med-service-list">
+              <div class="med-service-item">Guided symptom triage</div>
+              <div class="med-service-item">Medical report dashboard</div>
+              <div class="med-service-item">AI report summaries</div>
+              <div class="med-service-item">Doctor discovery</div>
+              <div class="med-service-item">History and continuity</div>
+              <div class="med-service-item">Voice-friendly explanations</div>
+            </div>
+          </section>
+
+          <div class="med-stats">
+            <div class="med-stat">
+              <span>67+</span>
+              <small>guided care flows</small>
+            </div>
+            <div class="med-stat">
+              <span>99%</span>
+              <small>focus on readable outputs</small>
+            </div>
+            <div class="med-stat">
+              <span>24/7</span>
+              <small>support at your pace</small>
             </div>
           </div>
           <div class="card-title">What you can do</div>
           <div class="feature-grid" style="margin-bottom:20px">
             <div class="feature-tile">
-              <div class="fi">ðŸ’¬</div>
+              <div class="fi">CHAT</div>
               <h3>Guided symptom chat</h3>
               <p>The assistant asks follow-up questions when your message is too vague or unrelated, so you get safer, more relevant information.</p>
             </div>
