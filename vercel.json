@@ -1,0 +1,11 @@
+{
+  "routes": [
+    { "src": "^/health$", "dest": "/api/index.py" },
+    { "src": "^/predict$", "dest": "/api/index.py" },
+    { "src": "^/upload$", "dest": "/api/index.py" },
+    { "src": "^/history$", "dest": "/api/index.py" },
+    { "src": "^/reports/extract-simple$", "dest": "/api/index.py" },
+    { "handle": "filesystem" },
+    { "src": "^/$", "dest": "/index.html" }
+  ]
+}

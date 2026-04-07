@@ -6,6 +6,7 @@ import os
 import re
 import sqlite3
 import subprocess
+import tempfile
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +17,7 @@ import requests
 
 
 BASE_DIR = Path(__file__).resolve().parent
+RUNTIME_DIR = Path(tempfile.gettempdir()) if os.getenv("VERCEL") else BASE_DIR
 
 
 def load_env_file(path: Path) -> None:
@@ -31,7 +33,7 @@ def load_env_file(path: Path) -> None:
 
 load_env_file(BASE_DIR / ".env")
 
-DB_PATH = os.getenv("HEALTHECHO_DB_PATH", str(BASE_DIR / "healthecho.db"))
+DB_PATH = os.getenv("HEALTHECHO_DB_PATH", str(RUNTIME_DIR / "healthecho.db"))
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2")
 HOST = os.getenv("HEALTHECHO_HOST", "0.0.0.0")
@@ -210,8 +212,17 @@ def predict_disease(data: SymptomRequest):
 
 @app.post("/upload")
 async def upload_report(file: UploadFile = File(...)):
+    return await extract_report(file)
+
+
+@app.post("/reports/extract-simple")
+async def extract_simple_report(file: UploadFile = File(...)):
+    return await extract_report(file)
+
+
+async def extract_report(file: UploadFile) -> dict:
     contents = await file.read()
-    temp_path = BASE_DIR / f"temp_{file.filename}"
+    temp_path = RUNTIME_DIR / f"temp_{Path(file.filename).name}"
     temp_path.write_bytes(contents)
     try:
         if file.filename.endswith(".pdf"):

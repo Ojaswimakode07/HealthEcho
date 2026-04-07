@@ -1,6 +1,10 @@
-﻿window.HEALTHECHO_ENV = Object.assign(
+window.HEALTHECHO_ENV = Object.assign(
   {
-    apiBase: '',
+    apiBase:
+      typeof window !== 'undefined' &&
+      (window.location.protocol === 'http:' || window.location.protocol === 'https:')
+        ? window.location.origin
+        : '',
     groqApiKey: '',
     firebase: {
       apiKey: 'AIzaSyA-QR2_Yr6oorg06cE0JoqkRxZiByLSTzI',
