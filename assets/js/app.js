@@ -1786,13 +1786,12 @@ async function runImmediateAnalysis(file) {
         const parsed = parseLabValuesFromText(rawText);
         params = normalizeReportParameters(parsed);
       }
-      if (!Object.keys(params).length) params = simulateExtraction(file.name);
     }
 
     const result = await analyzeReportWithGroq(file, rawText, params);
     loadingEl.style.display = 'none';
 
-    if (result) {
+    if (result && isMeaningfulReportAnalysis(result, params)) {
       // Merge any extracted lab values into params from the AI response
       if (result.abnormal_values && result.abnormal_values.length && !Object.keys(params).length) {
         result.abnormal_values.forEach(av => {
@@ -1849,7 +1848,7 @@ async function runImmediateAnalysis(file) {
     } else {
       const narrative = Object.keys(params).length
         ? simplePredictionFromParams(params)
-        : 'Analysis could not be completed. Please ensure the image is clear and well-lit.';
+        : 'We could not reliably read this report. Please upload a sharper image or clearer PDF with visible lab values, test names, and reference ranges.';
       bodyEl.innerHTML = `<div style="margin-bottom:12px;font-size:13px;color:var(--text)">${narrative}</div>
         <div class="disclaimer">âš•ï¸ Informational insights only. Please consult a qualified healthcare professional.</div>`;
       if (conclusionWrap && conclusionBody) {
@@ -2330,13 +2329,16 @@ function renderConclusion(el, aiResult, params) {
   const abnormal = entries.filter(([, p]) => p && p.status && p.status !== 'normal');
   const danger = abnormal.filter(([, p]) => p.status === 'danger');
   const warn = abnormal.filter(([, p]) => p.status === 'warn');
+  const analysisUnavailable = !aiResult && !entries.length;
 
-  const riskLevel = aiResult?.risk_level || (danger.length ? 'High' : warn.length ? 'Moderate' : 'Low');
-  const specialist = aiResult?.specialist || 'General Physician';
+  const riskLevel = analysisUnavailable ? 'Unavailable' : (aiResult?.risk_level || (danger.length ? 'High' : warn.length ? 'Moderate' : 'Low'));
+  const specialist = analysisUnavailable ? 'Upload a clearer report' : (aiResult?.specialist || 'General Physician');
   const disclaimer = aiResult?.disclaimer || 'This system provides informational insights only. Please consult a qualified healthcare professional for diagnosis and treatment.';
-  const riskClass = riskLevel === 'High' ? 'tag-a' : riskLevel === 'Moderate' ? 'tag-p' : 'tag-b';
-  const riskIcon = riskLevel === 'High' ? 'ðŸ”´' : riskLevel === 'Moderate' ? 'ðŸŸ¡' : 'ðŸŸ¢';
-  const urgencyMsg = riskLevel === 'High'
+  const riskClass = analysisUnavailable ? 'tag' : riskLevel === 'High' ? 'tag-a' : riskLevel === 'Moderate' ? 'tag-p' : 'tag-b';
+  const riskIcon = analysisUnavailable ? 'âš ï¸' : riskLevel === 'High' ? 'ðŸ”´' : riskLevel === 'Moderate' ? 'ðŸŸ¡' : 'ðŸŸ¢';
+  const urgencyMsg = analysisUnavailable
+    ? 'Re-upload the report with readable values and reference ranges, or use a text-based PDF for stronger extraction.'
+    : riskLevel === 'High'
     ? 'Seek medical attention promptly â€” within 24-48 hours.'
     : riskLevel === 'Moderate'
     ? 'Schedule a physician visit within the next 1-2 weeks.'
@@ -2354,7 +2356,7 @@ function renderConclusion(el, aiResult, params) {
   } else if (entries.length > 0) {
     conclusionText = 'All extracted parameters fall within normal reference ranges based on WHO/ICMR standard bands. No immediate clinical concern detected from this screening. Continue routine health monitoring.';
   } else {
-    conclusionText = 'Report received. Please ensure the image is clear and contains readable lab values for detailed analysis.';
+    conclusionText = 'The app could not extract enough reliable medical data from this file to produce a trustworthy report interpretation.';
   }
 
   const conditionsHtml = (aiResult?.possible_conditions || []).length
@@ -2388,7 +2390,7 @@ async function uploadSingleFile(item, queueIdx) {
   addProcessLog(`ðŸ“‹ Reading ${file.name}â€¦`);
 
   let extracted = {};
-  let extractionSource = 'demo_fallback';
+  let extractionSource = 'unreadable';
   let rawText = '';
 
   const server = await tryExtractViaBackend(file);
@@ -2418,12 +2420,11 @@ async function uploadSingleFile(item, queueIdx) {
     }
     if (!Object.keys(extracted).length) {
       if (rawText.length > 15) {
-        addProcessLog('âš  Text found but no standard markers â€” using demo values. Try clearer scan or Python API.');
+        addProcessLog('âš  Text was found, but no reliable lab markers could be extracted. Try a cleaner scan or clearer PDF.');
       } else {
-        addProcessLog('âš  Could not read file in browser â€” using demo values. For PDFs use https or run FastAPI + Tesseract.');
+        addProcessLog('âš  Could not read this file reliably. For better extraction, use a sharper image, a text PDF, or the FastAPI backend.');
       }
-      extracted = simulateExtraction(file.name);
-      extractionSource = 'demo_fallback';
+      extractionSource = 'unreadable';
     }
   }
 
@@ -2878,6 +2879,33 @@ function safeParseGroqJson(text) {
   return null;
 }
 
+function isWeakReportNarrative(text) {
+  const s = String(text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  if (!s) return true;
+  return [
+    'report received',
+    'please ensure the image is clear',
+    'contains readable lab values',
+    'analysis could not be completed',
+    'clear and well-lit',
+    'detailed analysis'
+  ].some(fragment => s.includes(fragment));
+}
+
+function isMeaningfulReportAnalysis(result, params) {
+  if (!result || typeof result !== 'object') return false;
+  const hasAbnormalValues = Array.isArray(result.abnormal_values) && result.abnormal_values.length > 0;
+  const hasFindings = Array.isArray(result.key_findings) && result.key_findings.length > 0;
+  const hasConditions = Array.isArray(result.possible_conditions) && result.possible_conditions.length > 0;
+  const hasTests = Array.isArray(result.recommended_tests) && result.recommended_tests.length > 0;
+  const hasExtractedParams = !!Object.keys(params || {}).length;
+  const summary = String(result.summary || '').trim();
+  const conclusion = String(result.conclusion || '').trim();
+  const hasStrongSummary = summary.length > 40 && !isWeakReportNarrative(summary);
+  const hasStrongConclusion = conclusion.length > 40 && !isWeakReportNarrative(conclusion);
+  return hasAbnormalValues || hasFindings || hasConditions || hasTests || hasExtractedParams || hasStrongSummary || hasStrongConclusion;
+}
+
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -2897,12 +2925,12 @@ async function streamReportAnalysis(file, rawText, params, loadEl, aiEl) {
   aiEl.innerHTML = '';
   const result = await analyzeReportWithGroq(file, rawText, params);
   loadEl.style.display = 'none';
-  if (result) {
+  if (result && isMeaningfulReportAnalysis(result, params)) {
     STATE.groqOnline = true;
     updateBackendBadge();
     renderStructuredReportAI(aiEl, result, '', false);
   } else {
-    aiEl.innerHTML = '<span style="color:var(--hint)">AI analysis could not be completed. Please try again.</span>';
+    aiEl.innerHTML = '<span style="color:var(--hint)">AI could not produce a reliable report interpretation from this file. Try a clearer scan or a text-based PDF.</span>';
   }
 }
 
@@ -2935,7 +2963,8 @@ function runOptionalReportAI() {
 }
 
 function extractionSourceLabel(src) {
-  if (!src || src === 'demo_fallback') return 'Source: demo values (file was not read as text â€” try HTTPS hosting, clearer scan, or FastAPI).';
+  if (!src || src === 'demo_fallback') return 'Source: fallback mode.';
+  if (src === 'unreadable') return 'Source: extraction failed â€” the file could not be read reliably.';
   if (String(src).startsWith('server')) return 'Source: your FastAPI backend (PyMuPDF / Tesseract).';
   if (src === 'browser_pdf') return 'Source: PDF text extracted in the browser.';
   if (src === 'browser_ocr') return 'Source: browser OCR (Tesseract.js).';
@@ -3828,7 +3857,7 @@ async function reanalyzeCurrentReport() {
   const result = await analyzeReportWithGroq(fileRef, rawText, params);
   if (loadingEl) loadingEl.style.display = 'none';
 
-  if (result) {
+  if (result && isMeaningfulReportAnalysis(result, params)) {
     // Update cached aiResult in state
     if (singleReport) singleReport.aiResult = result;
     renderStructuredReportAI(bodyEl, result, '', false);
@@ -3842,7 +3871,7 @@ async function reanalyzeCurrentReport() {
     if (voiceCtrl) voiceCtrl.style.display = 'flex';
     showToast('âœ“ Report re-analyzed in ' + (LANG_NAME_MAP[currentLang] || currentLang));
   } else {
-    bodyEl.innerHTML = '<span style="color:var(--hint)">Re-analysis could not be completed. Please try again.</span>';
+    bodyEl.innerHTML = '<span style="color:var(--hint)">Re-analysis could not extract reliable medical details from this file. Try a clearer scan or a text-based PDF.</span>';
     showToast('Re-analysis failed â€” please try again');
   }
 }
