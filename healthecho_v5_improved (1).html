@@ -105,6 +105,12 @@
           <div class="backend-dot"></div>
           <span>AI Offline</span>
         </div>
+        <div class="med-home-links">
+          <button class="med-toplink" onclick="switchToTab('home')">Home</button>
+          <button class="med-toplink" onclick="showRoboGuide()">How it works</button>
+          <button class="med-toplink" onclick="switchToTab('upload')">Reports</button>
+          <button class="btn btn-p btn-sm med-header-btn" onclick="switchToTab('chat')">Start AI consult</button>
+        </div>
         <button class="theme-toggle med-header-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">ðŸŒ™</button>
         <button class="btn btn-sm med-header-btn" onclick="showModal('loginModal')">Login</button>
         <button class="btn btn-p btn-sm med-header-btn" onclick="showModal('signupModal')">Sign up</button>
@@ -122,31 +128,6 @@
         <div class="pad home-pad">
           <section class="med-hero">
             <div class="med-hero-shell">
-              <div class="med-topbar">
-                <div class="med-topbar-left">
-                  <button class="menu-toggle med-home-menu" type="button" aria-label="Open menu" onclick="toggleSidebar()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="3" y1="6" x2="21" y2="6"></line>
-                      <line x1="3" y1="12" x2="21" y2="12"></line>
-                      <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                  </button>
-                  <div class="med-brand-mini">
-                    <span class="med-brand-mark">HE</span>
-                    <div>
-                      <div class="med-brand-name">HealthEcho Care</div>
-                      <div class="med-brand-tag">AI guidance for symptoms, reports, and next steps</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="med-topbar-right">
-                  <button class="theme-toggle med-home-toggle" id="homeThemeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">ðŸŒ™</button>
-                  <button class="btn btn-sm med-home-auth" onclick="showModal('loginModal')">Login</button>
-                  <button class="btn btn-p btn-sm med-home-auth" onclick="showModal('signupModal')">Sign up</button>
-                  <button class="btn btn-p btn-sm med-cta" onclick="switchToTab('chat')">Start AI consult</button>
-                </div>
-              </div>
-
               <div class="med-hero-grid">
                 <div class="med-copy">
                   <div class="med-kicker">Smart clinical support</div>
