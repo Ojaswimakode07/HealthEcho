@@ -42,7 +42,33 @@ body{overflow:hidden}
 /* â•â• APP SHELL â•â• */
 /* Mobile-first: bottom tabs, full-width main. Sidebar is an off-canvas drawer. */
 .app{display:flex;flex-direction:column;height:100dvh;width:100%;max-width:100%;background:var(--bg);position:relative}
-.sidebar,.sidebar-backdrop{display:none!important}
+.sidebar{
+  display:block;
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  width:min(82vw,320px);
+  background:linear-gradient(180deg,rgba(13,17,23,.98),rgba(18,25,33,.98));
+  border-right:1px solid var(--border);
+  z-index:120;
+  transform:translateX(-100%);
+  transition:transform var(--transition);
+  box-shadow:var(--shadow-md);
+}
+.sidebar-backdrop{
+  display:block;
+  position:fixed;
+  inset:0;
+  border:none;
+  background:rgba(3,8,14,.5);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity var(--transition);
+  z-index:110;
+}
+.sidebar-open .sidebar{transform:translateX(0)}
+.sidebar-open .sidebar-backdrop{opacity:1;pointer-events:auto}
 .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 
 @media(min-width:768px){
@@ -50,6 +76,7 @@ body{overflow:hidden}
   .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
   .tabs{display:none!important}
   .nav{border-bottom:1px solid var(--border)}
+  .menu-toggle{display:none}
 }
 
 /* â•â• SIDEBAR â•â• */
@@ -110,7 +137,7 @@ body{overflow:hidden}
 .user-pill span{font-size:11px;font-weight:600;color:var(--teal)}
 
 /* â•â• TABS (MOBILE) â•â• */
-.tabs{display:none!important;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;overflow-x:auto;scrollbar-width:none;position:sticky;bottom:0;z-index:50}
+.tabs{display:flex;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;overflow-x:auto;scrollbar-width:none;position:sticky;bottom:0;z-index:50}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:1;min-width:60px;padding:10px 6px 12px;font-size:9px;font-weight:600;cursor:pointer;color:var(--hint);display:flex;flex-direction:column;align-items:center;gap:4px;white-space:nowrap;letter-spacing:0.04em;text-transform:uppercase;transition:color var(--transition);border-top:2px solid transparent}
 .tab svg{width:18px;height:18px}
@@ -482,11 +509,16 @@ body{overflow:hidden}
 .home-hero h1 em{color:var(--teal);font-style:normal}
 .home-lead{font-size:14px;color:rgba(235,255,251,.78);line-height:1.8;max-width:620px;margin-bottom:20px}
 .home-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.med-hero-mini-stats{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 22px}
+.med-mini-stat{min-width:148px;padding:14px 16px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)}
+.med-mini-stat strong{display:block;font-size:22px;line-height:1;color:#fff;margin-bottom:6px}
+.med-mini-stat span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(235,255,251,.68)}
 .feature-grid{display:grid;grid-template-columns:1fr;gap:10px}
 @media(min-width:640px){.feature-grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:960px){.feature-grid{grid-template-columns:repeat(3,1fr)}}
 .feature-tile{background:linear-gradient(180deg,rgba(22,27,34,.96),rgba(18,24,30,.96));border:1px solid rgba(180,255,240,.12);border-radius:24px;padding:18px;transition:border-color var(--transition),transform var(--transition);box-shadow:0 18px 40px rgba(0,0,0,.18)}
 .feature-tile:hover{border-color:rgba(118,255,226,.34);transform:translateY(-2px)}
+.feature-action{width:100%;text-align:left;cursor:pointer;font-family:var(--font)}
 .feature-tile .fi{font-size:11px;margin-bottom:14px;display:inline-flex;align-items:center;justify-content:center;min-width:58px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#9df5df;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
 .feature-tile h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
 .feature-tile p{font-size:12px;color:var(--muted);line-height:1.7}
@@ -509,11 +541,18 @@ body{overflow:hidden}
 .med-card-screen{padding:28px;border-radius:30px;background:linear-gradient(180deg,rgba(245,255,252,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
 .med-card-screen h3{font-size:28px;line-height:1.06;letter-spacing:-.04em;color:#fff;max-width:320px;margin-bottom:12px}
 .med-card-screen p{font-size:13px;line-height:1.75;color:rgba(239,255,251,.78);max-width:340px}
+.med-access-panel h3,.med-access-panel p{max-width:none}
 .med-screen-badge{display:inline-flex;margin-bottom:16px;padding:7px 10px;border-radius:999px;background:#f4fffd;color:#0a6f61;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
 .med-card-list{display:grid;gap:10px;margin-top:18px}
 .med-card-list div{display:flex;align-items:center;gap:10px;font-size:12px;color:#f0fffc}
+.med-quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.med-quick-card{padding:16px;border-radius:22px;border:1px solid rgba(255,255,255,.1);background:rgba(9,24,29,.45);color:#effffc;text-align:left;cursor:pointer;transition:transform var(--transition),border-color var(--transition),background var(--transition);font-family:var(--font)}
+.med-quick-card:hover{transform:translateY(-2px);border-color:rgba(126,255,223,.35);background:rgba(10,34,40,.6)}
+.med-quick-card strong{display:block;font-size:14px;margin-bottom:6px}
+.med-quick-card span{display:block;font-size:11px;line-height:1.7;color:rgba(239,255,251,.74)}
 .med-dot{width:9px;height:9px;border-radius:50%;background:#88ffe4;box-shadow:0 0 0 6px rgba(136,255,228,.12)}
 .med-doctor-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.med-doctor-row-wide{grid-template-columns:repeat(4,1fr)}
 .med-avatar-card{padding:14px 12px;border-radius:22px;background:rgba(8,24,28,.45);border:1px solid rgba(255,255,255,.08);text-align:center}
 .med-avatar-card span{display:block;font-size:16px;font-weight:800;color:#fff}
 .med-avatar-card small{display:block;font-size:10px;color:rgba(236,255,250,.66);margin-top:4px;letter-spacing:.08em;text-transform:uppercase}
@@ -526,13 +565,42 @@ body{overflow:hidden}
 .med-services-copy h2{font-size:clamp(26px,4vw,44px);line-height:1.02;letter-spacing:-.05em;color:#fff;max-width:440px;margin-bottom:12px}
 .med-services-copy p{font-size:13px;line-height:1.8;color:rgba(235,255,252,.74);max-width:500px}
 .med-service-list{display:grid;gap:12px;align-content:center}
-.med-service-item{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#effffc;font-size:13px;font-weight:600}
+.med-service-item{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#effffc;font-size:13px;font-weight:600;text-align:left;cursor:pointer;font-family:var(--font);transition:transform var(--transition),border-color var(--transition),background var(--transition)}
+.med-service-item:hover{transform:translateY(-2px);border-color:rgba(126,255,223,.35);background:rgba(255,255,255,.1)}
 .med-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0 32px 24px}
 .med-stat{padding:24px 18px;border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,250,248,.98));border:1px solid rgba(0,0,0,.05);box-shadow:0 18px 38px rgba(12,28,34,.08);text-align:center}
 .med-stat span{display:inline-flex;align-items:center;justify-content:center;width:94px;height:94px;border-radius:50%;margin-bottom:14px;background:radial-gradient(circle at top left,#4ef3d3,#12a695);color:#fff;font-size:28px;font-weight:800;box-shadow:0 14px 30px rgba(18,166,149,.28)}
 .med-stat small{display:block;font-size:12px;color:#4f6971;font-weight:600}
 body:not(.light) .med-stat{background:linear-gradient(180deg,rgba(17,25,31,.98),rgba(20,31,38,.98));border-color:rgba(255,255,255,.07);box-shadow:0 20px 42px rgba(0,0,0,.18)}
 body:not(.light) .med-stat small{color:#97b7b8}
+.med-unique{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:0 32px 24px;padding:30px;border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.025));border:1px solid rgba(161,255,231,.12);overflow:hidden}
+.med-unique-visual{position:relative;min-height:340px;border-radius:30px;background:radial-gradient(circle at top left,rgba(126,255,223,.22),transparent 28%),linear-gradient(160deg,rgba(4,35,42,.9),rgba(8,20,28,.96));border:1px solid rgba(255,255,255,.07);display:flex;align-items:flex-end;padding:24px}
+.med-unique-card{position:relative;z-index:1;max-width:320px;padding:24px;border-radius:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px)}
+.med-unique-card h3{font-size:30px;line-height:1.02;letter-spacing:-.05em;color:#fff;margin-bottom:12px}
+.med-unique-card p{font-size:13px;line-height:1.8;color:rgba(239,255,251,.76)}
+.med-unique-badge{display:inline-flex;margin-bottom:16px;padding:7px 10px;border-radius:999px;background:#f4fffd;color:#0a6f61;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.med-unique-orb{position:absolute;border-radius:50%;filter:blur(6px);opacity:.9}
+.med-unique-orb-a{width:170px;height:170px;top:28px;right:42px;background:radial-gradient(circle,#7ef8e2,rgba(126,248,226,.08))}
+.med-unique-orb-b{width:120px;height:120px;bottom:36px;left:34px;background:radial-gradient(circle,#7ba7ff,rgba(123,167,255,.08))}
+.med-unique-copy{display:flex;flex-direction:column;justify-content:center}
+.med-unique-copy h2{font-size:clamp(26px,4vw,46px);line-height:1.02;letter-spacing:-.05em;color:#fff;max-width:480px;margin-bottom:16px}
+.med-unique-points{display:grid;gap:14px}
+.med-unique-point{padding:16px 18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.med-unique-point strong{display:block;font-size:15px;color:#effffc;margin-bottom:6px}
+.med-unique-point span{display:block;font-size:12px;line-height:1.75;color:rgba(235,255,252,.72)}
+.med-callback{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;margin:0 32px 24px;padding:28px;border-radius:34px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,250,248,.98));border:1px solid rgba(0,0,0,.05);box-shadow:0 18px 38px rgba(12,28,34,.08)}
+.med-callback-kicker{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#0aa08a;margin-bottom:14px}
+.med-callback h2{font-size:clamp(28px,4vw,46px);line-height:1.02;letter-spacing:-.05em;color:#102a2f;margin-bottom:12px;max-width:480px}
+.med-callback p{font-size:13px;line-height:1.8;color:#4f6971;max-width:520px}
+.med-callback-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.med-callback-form{display:grid;gap:12px}
+.med-form-card{padding:18px 20px;border-radius:24px;border:1px solid rgba(14,42,47,.08);background:#f7fffc;color:#102a2f;text-align:left;cursor:pointer;font-family:var(--font);transition:transform var(--transition),box-shadow var(--transition),border-color var(--transition)}
+.med-form-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(12,28,34,.08);border-color:rgba(18,166,149,.25)}
+.med-form-card strong{display:block;font-size:15px;margin-bottom:6px}
+.med-form-card span{display:block;font-size:12px;line-height:1.75;color:#5d757c}
+.med-cta-band{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 32px 22px;padding:24px 28px;border-radius:30px;background:linear-gradient(120deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid rgba(161,255,231,.12)}
+.med-cta-copy h2{font-size:clamp(26px,4vw,42px);line-height:1.02;letter-spacing:-.05em;color:#fff;max-width:480px}
+.med-cta-button{padding:14px 26px;border-radius:999px;white-space:nowrap}
 .site-footer{margin:28px 32px 0;padding:26px 24px;border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.025));border:1px solid rgba(161,255,231,.12);display:flex;flex-direction:column;gap:20px}
 .site-footer-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:24px;width:100%}
 .site-footer-brand{max-width:520px}
@@ -546,25 +614,32 @@ body:not(.light) .med-stat small{color:#97b7b8}
 .site-footer-bottom{width:100%;display:flex;justify-content:space-between;gap:10px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--muted);flex-wrap:wrap}
 .home-pad>.card-title,.home-pad>.feature-grid,.home-pad>.comp{margin-left:32px;margin-right:32px}
 .nav-hidden-guest{display:none!important}
-@media(max-width:1040px){.med-hero-grid,.med-services,.site-footer-grid{grid-template-columns:1fr}}
+@media(max-width:1040px){.med-hero-grid,.med-services,.site-footer-grid,.med-unique,.med-callback{grid-template-columns:1fr}}
 @media(max-width:767px){
   .home-mode .conn-banner{display:none}
   .med-app-header{padding:12px 14px;align-items:flex-start;flex-direction:column}
   .nav-left,.nav-r{width:100%}
-  .nav-left{flex-direction:column;align-items:flex-start}
+  .nav-left{flex-direction:row;align-items:center;flex-wrap:wrap}
   .nav-r{justify-content:flex-start;flex-wrap:wrap}
   .med-app-links{margin-left:0;width:100%;padding-bottom:4px}
   .med-hero-grid{grid-template-columns:1fr;padding:12px 18px 88px}
+  .med-hero-mini-stats{display:grid;grid-template-columns:1fr}
+  .med-mini-stat{min-width:0}
   .med-card-screen h3{font-size:24px}
+  .med-quick-actions{grid-template-columns:1fr}
   .med-appointment-strip{grid-template-columns:1fr;margin:-58px 10px 0;padding:16px}
   .med-services{grid-template-columns:1fr;padding:22px 18px;margin-left:10px;margin-right:10px}
   .med-stats{grid-template-columns:1fr;margin-left:10px;margin-right:10px}
+  .med-unique,.med-callback,.med-cta-band{margin-left:10px;margin-right:10px}
+  .med-unique,.med-callback{padding:22px 18px}
+  .med-unique-visual{min-height:280px}
+  .med-callback-links,.med-cta-band{flex-direction:column;align-items:flex-start}
   .site-footer{padding:18px;margin-left:10px;margin-right:10px}
   .home-pad>.card-title,.home-pad>.feature-grid,.home-pad>.comp{margin-left:10px;margin-right:10px}
 }
 @media(max-width:560px){
   .med-copy h1{font-size:40px}
-  .med-doctor-row{grid-template-columns:1fr}
+  .med-doctor-row,.med-doctor-row-wide{grid-template-columns:1fr 1fr}
   .feature-grid{grid-template-columns:1fr}
 }
 .nav-hidden-guest{display:none!important}
@@ -595,6 +670,7 @@ body:not(.light) .med-stat small{color:#97b7b8}
   .med-app-header{padding:12px 14px}
   .med-app-links{display:none}
   .med-app-sub{display:none}
+  .menu-toggle{display:flex}
   input,select,textarea{font-size:16px!important}
   .btn,.modal-btn,.send-btn,.cam-inp-btn,.theme-toggle{min-height:44px}
   .menu-toggle{min-height:44px;min-width:44px}
@@ -603,7 +679,7 @@ body:not(.light) .med-stat small{color:#97b7b8}
   .modal{padding:20px 16px 40px;border-radius:20px 20px 0 0}
   .inp-area{position:sticky;bottom:0;z-index:30;background:var(--bg2)}
   .chat-msgs{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-  .tabs{padding-bottom:env(safe-area-inset-bottom,8px);position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--bg2)}
+  .tabs{display:flex!important;padding-bottom:env(safe-area-inset-bottom,8px);position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--bg2)}
   .main-area{padding-bottom:0}
   .nav-r .backend-badge{display:none!important}
   .nav{padding-inline:14px}
@@ -621,6 +697,9 @@ body:not(.light) .med-stat small{color:#97b7b8}
   .feedback-popup{bottom:100px;width:calc(100% - 24px);right:12px}
   #voiceControls{flex-wrap:wrap;gap:6px}
   .scr-hd h2{font-size:18px}
+  .sidebar{width:min(86vw,320px)}
+  .sidebar-tab{padding:12px 14px;font-size:14px}
+  .sidebar-footer{padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
 }
 @supports(padding:max(0px)){
   .tabs{padding-bottom:max(env(safe-area-inset-bottom),8px)}
