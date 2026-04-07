@@ -70,17 +70,27 @@
       <div style="margin-top:8px;font-size:10px;color:var(--hint)">HealthEcho v5.0</div>
     </div>
   </aside>
+  <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="Close menu" onclick="closeSidebar()"></button>
 
   <!-- MAIN AREA -->
   <div class="main-area">
 
     <!-- NAV -->
     <nav class="nav">
-      <div class="nav-logo">
+      <div class="nav-left">
+        <button class="menu-toggle" type="button" aria-label="Open menu" onclick="toggleSidebar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div class="nav-logo">
         <div class="logo-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
         <span class="logo-text">Health<em>Echo</em></span>
+        </div>
       </div>
       <div class="nav-r" id="navR">
         <div id="navBackendBadge" class="backend-badge offline" style="display:none">
@@ -101,7 +111,7 @@
 
       <!-- HOME / LANDING -->
       <div class="scr on" id="s-home">
-        <div class="pad">
+        <div class="pad home-pad">
           <section class="med-hero">
             <div class="med-hero-shell">
               <div class="med-topbar">
@@ -247,6 +257,17 @@
             </div>
           </div>
           <div class="comp">Medical note: HealthEcho does not diagnose or prescribe. For emergencies, call your local emergency number or go to the nearest ER immediately.</div>
+          <footer class="site-footer">
+            <div>
+              <div class="site-footer-title">HealthEcho Team</div>
+              <div class="site-footer-copy">Designed to make symptom guidance, report understanding, and care discovery feel simpler and more human.</div>
+            </div>
+            <div class="site-footer-links">
+              <button class="site-footer-link" onclick="switchToTab('chat')">AI Consult</button>
+              <button class="site-footer-link" onclick="switchToTab('upload')">Reports</button>
+              <button class="site-footer-link" onclick="switchToTab('hospitals')">Doctors</button>
+            </div>
+          </footer>
         </div>
       </div>
 

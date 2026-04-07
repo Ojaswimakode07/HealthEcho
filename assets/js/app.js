@@ -70,6 +70,7 @@ function goHistory() {
 }
 
 function switchToTab(name) {
+  closeSidebar();
   if (name === 'history' && !STATE.user) {
     showToast('Sign in to view consultation history');
     showModal('loginModal');
@@ -91,6 +92,18 @@ function switchToTab(name) {
     }
   }
   if (name === 'upload') renderUploadedReports();
+}
+
+function openSidebar() {
+  document.body.classList.add('sidebar-open');
+}
+
+function closeSidebar() {
+  document.body.classList.remove('sidebar-open');
+}
+
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-open');
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
