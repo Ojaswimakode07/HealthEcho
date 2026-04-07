@@ -42,10 +42,7 @@ body{overflow:hidden}
 /* â•â• APP SHELL â•â• */
 /* Mobile-first: bottom tabs, full-width main. Sidebar is an off-canvas drawer. */
 .app{display:flex;flex-direction:column;height:100dvh;width:100%;max-width:100%;background:var(--bg);position:relative}
-.sidebar{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:86vw;background:var(--bg2);border-right:1px solid var(--border);padding:0;z-index:120;transform:translateX(-100%);transition:transform var(--transition),box-shadow var(--transition);box-shadow:none}
-.sidebar-backdrop{position:fixed;inset:0;border:none;background:rgba(3,8,13,.56);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity var(--transition);z-index:110}
-.sidebar-open .sidebar{transform:translateX(0);box-shadow:0 18px 50px rgba(0,0,0,.35)}
-.sidebar-open .sidebar-backdrop{opacity:1;pointer-events:auto}
+.sidebar,.sidebar-backdrop{display:none!important}
 .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 
 @media(min-width:768px){
@@ -73,12 +70,12 @@ body{overflow:hidden}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;gap:8px}
 .nav-left{display:flex;align-items:center;gap:12px;min-width:0}
 .nav-logo{display:flex;align-items:center;gap:8px}
-.home-mode .nav{display:none}
+.home-mode .nav{display:flex}
 .med-app-header{padding:14px 24px;background:linear-gradient(180deg,rgba(7,39,45,.96),rgba(8,29,36,.92));border-bottom:1px solid rgba(166,255,232,.08)}
 .med-app-brand{gap:12px}
 .med-app-sub{font-size:10px;letter-spacing:.04em;color:rgba(235,255,251,.62);margin-top:2px;white-space:nowrap}
-.med-app-links{display:flex;align-items:center;gap:8px;margin-left:18px;flex-wrap:wrap}
-.med-home-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.med-app-links{display:flex;align-items:center;gap:8px;margin-left:18px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.med-app-links::-webkit-scrollbar{display:none}
 .menu-toggle{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:var(--bg3);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);flex-shrink:0}
 .menu-toggle:hover{background:var(--bg4);border-color:var(--teal-l2);color:var(--teal)}
 .menu-toggle svg{width:18px;height:18px}
@@ -113,7 +110,7 @@ body{overflow:hidden}
 .user-pill span{font-size:11px;font-weight:600;color:var(--teal)}
 
 /* â•â• TABS (MOBILE) â•â• */
-.tabs{display:flex;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;overflow-x:auto;scrollbar-width:none;position:sticky;bottom:0;z-index:50}
+.tabs{display:none!important;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;overflow-x:auto;scrollbar-width:none;position:sticky;bottom:0;z-index:50}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:1;min-width:60px;padding:10px 6px 12px;font-size:9px;font-weight:600;cursor:pointer;color:var(--hint);display:flex;flex-direction:column;align-items:center;gap:4px;white-space:nowrap;letter-spacing:0.04em;text-transform:uppercase;transition:color var(--transition);border-top:2px solid transparent}
 .tab svg{width:18px;height:18px}
@@ -552,7 +549,11 @@ body:not(.light) .med-stat small{color:#97b7b8}
 @media(max-width:1040px){.med-hero-grid,.med-services,.site-footer-grid{grid-template-columns:1fr}}
 @media(max-width:767px){
   .home-mode .conn-banner{display:none}
-  .med-home-links{display:none}
+  .med-app-header{padding:12px 14px;align-items:flex-start;flex-direction:column}
+  .nav-left,.nav-r{width:100%}
+  .nav-left{flex-direction:column;align-items:flex-start}
+  .nav-r{justify-content:flex-start;flex-wrap:wrap}
+  .med-app-links{margin-left:0;width:100%;padding-bottom:4px}
   .med-hero-grid{grid-template-columns:1fr;padding:12px 18px 88px}
   .med-card-screen h3{font-size:24px}
   .med-appointment-strip{grid-template-columns:1fr;margin:-58px 10px 0;padding:16px}
@@ -603,7 +604,7 @@ body:not(.light) .med-stat small{color:#97b7b8}
   .inp-area{position:sticky;bottom:0;z-index:30;background:var(--bg2)}
   .chat-msgs{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
   .tabs{padding-bottom:env(safe-area-inset-bottom,8px);position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--bg2)}
-  .main-area{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))}
+  .main-area{padding-bottom:0}
   .nav-r .backend-badge{display:none!important}
   .nav{padding-inline:14px}
   .modal-bg{align-items:flex-end}

@@ -78,13 +78,6 @@
     <!-- NAV -->
     <nav class="nav med-app-header">
       <div class="nav-left">
-        <button class="menu-toggle" type="button" aria-label="Open menu" onclick="toggleSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
         <div class="nav-logo med-app-brand">
           <div class="logo-icon">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -96,8 +89,13 @@
         </div>
         <div class="med-app-links">
           <button class="med-toplink" onclick="switchToTab('home')">Home</button>
+          <button class="med-toplink" onclick="switchToTab('chat')">AI Consult</button>
+          <button class="med-toplink" onclick="switchToTab('upload')">Upload Reports</button>
+          <button class="med-toplink" onclick="switchToTab('dashboard')">Dashboard</button>
+          <button class="med-toplink nav-history-item" onclick="switchToTab('history')">History</button>
+          <button class="med-toplink" onclick="switchToTab('hospitals')">Find Doctors</button>
+          <button class="med-toplink" onclick="switchToTab('profile')">Profile</button>
           <button class="med-toplink" onclick="showRoboGuide()">How it works</button>
-          <button class="med-toplink" onclick="switchToTab('upload')">Reports</button>
         </div>
       </div>
       <div class="nav-r" id="navR">
@@ -105,12 +103,7 @@
           <div class="backend-dot"></div>
           <span>AI Offline</span>
         </div>
-        <div class="med-home-links">
-          <button class="med-toplink" onclick="switchToTab('home')">Home</button>
-          <button class="med-toplink" onclick="showRoboGuide()">How it works</button>
-          <button class="med-toplink" onclick="switchToTab('upload')">Reports</button>
-          <button class="btn btn-p btn-sm med-header-btn" onclick="switchToTab('chat')">Start AI consult</button>
-        </div>
+        <button class="btn btn-p btn-sm med-header-btn" onclick="switchToTab('chat')">Start AI consult</button>
         <button class="theme-toggle med-header-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">ðŸŒ™</button>
         <button class="btn btn-sm med-header-btn" onclick="showModal('loginModal')">Login</button>
         <button class="btn btn-p btn-sm med-header-btn" onclick="showModal('signupModal')">Sign up</button>
