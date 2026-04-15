@@ -1,119 +1,89 @@
-# HealthEcho
+# HealthEcho Repository
+
+This repository now contains two related application tracks:
+
+- `HealthEcho`: the original medical-assistant web app and deployment setup already present on `main`
+- `HealthNova`: the newer frontend and backend application added in this push
+
+## HealthEcho
 
 HealthEcho is a medical-assistant web app with a static frontend and an optional FastAPI backend.
 
-## Project Structure
+Main existing files include:
 
-- `index.html` - deployment-friendly frontend entry page
-- `healthecho_v5_improved (1).html` - main frontend page
-- `assets/css/styles.css` - extracted app styles
-- `assets/js/env.js` - frontend runtime config bridge
-- `assets/js/firebase.js` - Firebase initialization and auth bootstrapping
-- `assets/js/app.js` - main frontend logic
-- `api/index.py` - Vercel Python entrypoint
-- `backend/main.py` - optional FastAPI backend
-- `backend/__init__.py` - backend package marker
-- `backend/requirements.txt` - backend Python dependencies
-- `requirements.txt` - root Python dependencies for Vercel
-- `Procfile` - backend start command for Procfile-based hosts
-- `render.yaml` - optional Render blueprint for frontend + backend
-- `vercel.json` - Vercel routing for static frontend + Python API
-- `.env.example` - frontend config template
-- `backend/.env.example` - backend config template
+- `index.html`
+- `assets/css/styles.css`
+- `assets/js/env.js`
+- `assets/js/firebase.js`
+- `assets/js/app.js`
+- `api/index.py`
+- `backend/main.py`
+- `backend/requirements.txt`
+- `vercel.json`
+- `render.yaml`
 
-## Frontend Setup
+## HealthNova
 
-1. Open `.env.example` and copy the values you want into `.env`.
-2. Update `assets/js/env.js` with the runtime values you want exposed to the browser.
-3. Open `index.html` in a browser, or serve the folder with a simple static server.
+HealthNova is a full-stack medical report analysis and chat workspace.
 
-## Backend Setup
+### Included directories
 
-1. Copy `backend/.env.example` to `backend/.env` if needed.
-2. Install Python dependencies:
+- `healthnova-frontend/` - Vite + React frontend
+- `healthnova-backend/` - FastAPI backend
+- `medical_docs/` - local medical knowledge sources
+- `vectorstore/` - generated retrieval index data
 
-```bash
-pip install -r backend/requirements.txt
-```
+### HealthNova frontend
 
-3. Start the backend:
+Key files:
 
-```bash
-uvicorn backend.main:app --reload
-```
+- `healthnova-frontend/src/App.jsx`
+- `healthnova-frontend/src/pages/WorkspacePage.jsx`
+- `healthnova-frontend/src/pages/LandingPage.jsx`
+- `healthnova-frontend/src/services/api.js`
 
-The backend reads configuration from `backend/.env`.
-
-## Deployment
-
-### Static Frontend
-
-- Deploy the repo root as a static site.
-- Use `index.html` as the entry file.
-- `assets/js/env.js` now defaults to the same origin on `http` or `https`, which works for single-host deployments.
-- If your frontend and backend are on different domains, set `apiBase` in `assets/js/env.js` to your deployed backend URL.
-- If your frontend and backend are on different domains, set `HEALTHECHO_ALLOW_ORIGINS` in the backend to your frontend origin.
-
-Example:
-
-```js
-window.HEALTHECHO_ENV = Object.assign(
-  {
-    apiBase: 'https://your-backend-domain.onrender.com',
-    groqApiKey: '',
-    firebase: {
-      apiKey: 'YOUR_FIREBASE_API_KEY',
-      authDomain: 'YOUR_PROJECT.firebaseapp.com',
-      projectId: 'YOUR_PROJECT_ID',
-      storageBucket: 'YOUR_PROJECT.firebasestorage.app',
-      messagingSenderId: 'YOUR_SENDER_ID',
-      appId: 'YOUR_APP_ID',
-      measurementId: 'YOUR_MEASUREMENT_ID'
-    }
-  },
-  window.HEALTHECHO_ENV || {}
-);
-```
-
-### Backend
-
-- The backend is ready to deploy to Render, Railway, Heroku-style Procfile hosts, or any VM/container that can run `uvicorn`.
-- Install from `backend/requirements.txt`.
-- Start with:
+Setup:
 
 ```bash
-uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+cd healthnova-frontend
+npm install
+copy .env.example .env
+npm run dev
 ```
 
-- Health check endpoint: `GET /health`
-- Report extraction endpoint preserved for deployment compatibility: `POST /reports/extract-simple`
-- Legacy upload endpoint also remains available: `POST /upload`
+### HealthNova backend
 
-### Render
+Key files:
 
-- `render.yaml` is included for a two-service setup:
-- one Python web service for the backend
-- one static site for the frontend
+- `healthnova-backend/app/main.py`
+- `healthnova-backend/app/routes/analyze.py`
+- `healthnova-backend/app/routes/chat.py`
+- `healthnova-backend/app/modules/extract_values.py`
+- `healthnova-backend/app/modules/ocr.py`
 
-After deploy, update `assets/js/env.js` so `apiBase` matches the actual backend URL if your platform does not inject it automatically.
+Setup:
 
-### Vercel
+```bash
+cd healthnova-backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+copy .env.example .env
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
 
-- `vercel.json` and `api/index.py` are included so Vercel can serve the static frontend and route API requests into FastAPI.
-- The frontend now uses the same deployed domain by default, so `/health`, `/predict`, `/upload`, `/history`, and `/reports/extract-simple` can work from one Vercel project.
-- On Vercel, SQLite and temporary upload files now use the runtime temp directory instead of the read-only repo folder.
-- SQLite on Vercel serverless is still temporary, so use it only for testing unless you move to an external database.
+### Helper scripts
 
-## Environment Files
+Repository root helper scripts for HealthNova include:
 
-- `.env` is for local project configuration notes and values.
-- `backend/.env` is read by the FastAPI backend directly.
-- Because this frontend is plain HTML/JS, the browser does not load `.env` files by itself.
-- Any frontend values that must exist at runtime should also be reflected in `assets/js/env.js`.
+- `start-healthnova.ps1`
+- `run-backend.ps1`
+- `backend-watchdog.ps1`
+- `backend-supervisor.ps1`
+- `smoke-test.ps1`
 
 ## Notes
 
-- `.env` files are ignored by git.
-- The hardcoded Groq default key was removed from the frontend logic.
-- Firebase config is loaded through the external frontend config/bootstrap files now.
-- `pytesseract` and `pdf2image` may require system packages on your backend host for full OCR/PDF extraction support.
+- Local `.env` files, virtual environments, logs, and build output are gitignored.
+- The HealthNova backend includes Groq-assisted analysis and chat routes.
+- The HealthNova frontend includes the workspace chat, report analysis UI, and local persistence helpers.
